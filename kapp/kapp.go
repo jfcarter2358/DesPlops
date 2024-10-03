@@ -12,6 +12,7 @@ import (
 )
 
 func Deploy(appName, manifestPath string) error {
+	appName = strings.ReplaceAll(appName, "_", "-")
 	cmd := exec.Command("kapp", "deploy", "-a", appName, "--diff-changes", "-f", manifestPath, "-y")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -19,6 +20,7 @@ func Deploy(appName, manifestPath string) error {
 }
 
 func DryRun(appName, manifestPath string) error {
+	appName = strings.ReplaceAll(appName, "_", "-")
 	cmd := exec.Command("kapp", "deploy", "-a", appName, "--diff-changes", "-f", manifestPath)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -26,6 +28,7 @@ func DryRun(appName, manifestPath string) error {
 }
 
 func Backup(appName, backupPath string) error {
+	appName = strings.ReplaceAll(appName, "_", "-")
 	cmd := exec.Command("kapp", "inspect", "-a", appName, "--raw")
 	var outb bytes.Buffer
 	cmd.Stdout = &outb
