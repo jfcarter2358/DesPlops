@@ -1,0 +1,5 @@
+kustomize-manifest.yaml
+helm-manifest.yaml
+test/kustomize/overlays/foo/files/foo
+test/values.yaml
+dist

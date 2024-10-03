@@ -1,0 +1,52 @@
+.variables:
+  architectures:
+    - amd64
+    - arm64
+  oses:
+    - darwin
+    - freebsd
+    - linux
+    - openbsd
+    - windows
+  version: 0.1.0
+set-version:
+  help: Update version constant from VERSION file
+  cmd: |
+    version = ?(cat VERSION).strip()
+    sed -i 's/const VERSION = ".*"/const VERSION = "{version}"/' constants/constants.go
+build:
+  help: Build Scaffold CLI
+  cmd: |
+    # Clean up environment
+    stud clean
+    mkdir -p dist
+
+    stud set-version
+
+    # Build CLI for below oses and architectures and drop the binary into dist directories
+    for arch_name in architectures:
+      for os_name in oses:
+        os_name_upper = os_name.upper()
+        arch_name_upper = arch_name.upper()
+
+        header_string = f"** BUILDING FOR {os_name_upper}/{arch_name_upper} **"
+        header_width = len(header_string)
+        header_line = "*" * header_width
+
+        echo "{header_line}"
+        echo "{header_string}"
+        echo "{header_line}"
+
+        output_path = f"dist/{os_name}/{arch_name}"
+        mkdir -p "{output_path}"
+        env GOOS="{os_name}" GOARCH="{arch_name}" CGO_ENABLED=0 go build -v -o desplops
+        mv desplops "{output_path}"
+clean:
+  help: Remove build and test artifacts
+  cmd: |
+    rm -r dist || true
+test:
+  help: Test desplops
+  cmd: |
+    go run main.go -mode kustomize -template ./test/kustomize/overlays/foo -config ./test/config.yaml -output ./test/kustomize-manifest.yaml -loglevel TRACE
+    go run main.go -mode helm -template ./test/helm/foo -config ./test/config.yaml -output ./test/helm-manifest.yaml -values ./test/values.yaml -loglevel TRACE
