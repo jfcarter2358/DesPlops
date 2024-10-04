@@ -11,25 +11,25 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-func Deploy(appName, manifestPath string) error {
-	appName = strings.ReplaceAll(appName, "_", "-")
-	cmd := exec.Command("kapp", "deploy", "-a", appName, "--diff-changes", "-f", manifestPath, "-y")
+func Deploy(kappName, manifestPath string) error {
+	kappName = strings.ReplaceAll(kappName, "_", "-")
+	cmd := exec.Command("kapp", "deploy", "-a", kappName, "--diff-changes", "-f", manifestPath, "-y")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
 }
 
-func DryRun(appName, manifestPath string) error {
-	appName = strings.ReplaceAll(appName, "_", "-")
-	cmd := exec.Command("kapp", "deploy", "-a", appName, "--diff-changes", "-f", manifestPath)
+func DryRun(kappName, manifestPath string) error {
+	kappName = strings.ReplaceAll(kappName, "_", "-")
+	cmd := exec.Command("kapp", "deploy", "-a", kappName, "--diff-changes", "--diff-run", "-f", manifestPath)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
 }
 
-func Backup(appName, backupPath string) error {
-	appName = strings.ReplaceAll(appName, "_", "-")
-	cmd := exec.Command("kapp", "inspect", "-a", appName, "--raw")
+func Backup(kappName, backupPath string) error {
+	kappName = strings.ReplaceAll(kappName, "_", "-")
+	cmd := exec.Command("kapp", "inspect", "-a", kappName, "--raw")
 	var outb bytes.Buffer
 	cmd.Stdout = &outb
 	cmd.Stderr = os.Stderr

@@ -49,4 +49,4 @@ test:
   help: Test desplops
   cmd: |
     go run main.go -mode kustomize -template ./test/kustomize/overlays/foo -config ./test/config.yaml -output ./test/kustomize-manifest.yaml -loglevel TRACE
-    go run main.go -mode helm -template ./test/helm/foo -config ./test/config.yaml -output ./test/helm-manifest.yaml -values ./test/values.yaml -loglevel TRACE
+    go run main.go -mode helm -template ./test/helm/foo -config ./test/config.yaml -output ./test/helm-manifest.yaml -values ./test/values.yaml -loglevel TRACE -kappname foobar -override='IMAGE=mongodb' 
