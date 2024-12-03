@@ -11,15 +11,15 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-func Template(appName, chartPath, valuesPath, manifestPath string) error {
+func Template(appName, chartPath, valuesPath string) (string, error) {
 	cmd := exec.Command("helm", "template", strings.Replace(appName, "-", "", -1), chartPath, "-f", valuesPath)
 	var outb bytes.Buffer
 	cmd.Stdout = &outb
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
-		return err
+		return "", err
 	}
-	return os.WriteFile(manifestPath, outb.Bytes(), 0644)
+	return outb.String(), nil
 }
 
 func WriteSecrets(config sops.SopsData, chartPath, valuesPath string) error {

@@ -3,23 +3,15 @@ package utils
 import (
 	"desplops/sops"
 	"fmt"
-	"os"
 	"strings"
 )
 
-func ReplaceConfig(config sops.SopsData, manifestPath string) error {
-	manifestBytes, err := os.ReadFile(manifestPath)
-	if err != nil {
-		return err
-	}
-
-	manifest := string(manifestBytes)
-
+func ReplaceConfig(config sops.SopsData, manifest string) string {
 	for key, val := range config.Config {
 		manifest = strings.ReplaceAll(manifest, fmt.Sprintf("$%s", key), fmt.Sprintf("%v", val))
 	}
 
-	return os.WriteFile(manifestPath, []byte(manifest), 0644)
+	return manifest
 }
 
 func Contains(s []string, e string) bool {

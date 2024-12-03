@@ -122,4 +122,5 @@ tolerations: []
 
 affinity: {}
 
-foo: ""
+foo:
+  foo: ""
